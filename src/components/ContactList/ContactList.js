@@ -1,9 +1,14 @@
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteContact } from '../../redux/contacts/contacts-actions';
+import { getVisibleContacts } from '../../redux/contacts/contacts-selectors';
 import { ReactComponent as DeleteIcon } from '../../img/delete.svg';
 import s from './ContactList.module.css';
 
-function ContactList({ contacts, onDeleteContact }) {
-  return (
+function ContactList() {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getVisibleContacts);
+
+  return contacts.length > 0 ? (
     <ul className={s.list}>
       {contacts.map(({ id, name, number }) => (
         <li className={s.item} key={id}>
@@ -14,25 +19,16 @@ function ContactList({ contacts, onDeleteContact }) {
           <button
             className={s.btn}
             type="button"
-            onClick={() => onDeleteContact(id)}
+            onClick={() => dispatch(deleteContact(id))}
           >
             <DeleteIcon width="26" height="26" />
           </button>
         </li>
       ))}
     </ul>
+  ) : (
+    <p>Your phonebook is empty. Please add contact.</p>
   );
 }
-
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    }),
-  ),
-  onDeleteContact: PropTypes.func.isRequired,
-};
 
 export default ContactList;

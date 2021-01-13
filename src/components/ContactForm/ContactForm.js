@@ -1,9 +1,14 @@
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contacts/contacts-actions';
+import { getContacts } from '../../redux/contacts/contacts-selectors';
 import Cleave from 'cleave.js/react';
-import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import s from './ContactForm.module.css';
 
-function ContactForm({ onSubmit }) {
+function ContactForm() {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -24,9 +29,37 @@ function ContactForm({ onSubmit }) {
     }
   };
 
+  const checkRepeatName = name => {
+    return contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase(),
+    );
+  };
+
+  const checkRepeatNumber = number => {
+    return contacts.find(contact => contact.number === number);
+  };
+
+  const checkEmptyQuery = (name, number) => {
+    return name.trim() === '' || number.trim() === '';
+  };
+
+  const checkValidNumber = number => {
+    return !/\d{3}[-]\d{2}[-]\d{2}/g.test(number);
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
-    onSubmit(name, number);
+    if (checkRepeatName(name)) {
+      toast(`🤔 This ${name} is already in the phonebook.`);
+    } else if (checkRepeatNumber(number)) {
+      toast(`🤔 This ${number} is already in the phonebook.`);
+    } else if (checkEmptyQuery(name, number)) {
+      toast.info("😱 Enter the contact's name and number phone!");
+    } else if (checkValidNumber(number)) {
+      toast.error('💩 Enter the correct number phone!');
+    } else {
+      dispatch(addContact(name, number));
+    }
     resetInput();
   };
 
@@ -66,9 +99,5 @@ function ContactForm({ onSubmit }) {
     </form>
   );
 }
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-};
 
 export default ContactForm;
