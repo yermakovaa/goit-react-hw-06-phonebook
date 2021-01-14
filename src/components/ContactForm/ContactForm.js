@@ -50,9 +50,9 @@ function ContactForm() {
   const handleSubmit = e => {
     e.preventDefault();
     if (checkRepeatName(name)) {
-      toast(`🤔 This ${name} is already in the phonebook.`);
+      toast(`🤔 ${name} is already in the phonebook.`);
     } else if (checkRepeatNumber(number)) {
-      toast(`🤔 This ${number} is already in the phonebook.`);
+      toast(`🤔 ${number} is already in the phonebook.`);
     } else if (checkEmptyQuery(name, number)) {
       toast.info("😱 Enter the contact's name and number phone!");
     } else if (checkValidNumber(number)) {
