@@ -10,34 +10,43 @@ function ContactList() {
   const dispatch = useDispatch();
   const contacts = useSelector(getVisibleContacts);
 
-  return contacts.length > 0 ? (
-    <TransitionGroup component="ul" className={s.list}>
-      {contacts.map(({ id, name, number }) => (
-        <CSSTransition
-          key={id}
-          timeout={250}
-          mountOnEnter
-          unmountOnExit
-          classNames={popTransition}
-        >
-          <li className={s.item}>
-            <p className={s.info}>
-              <b>{name}</b>
-              <em>{number}</em>
-            </p>
-            <button
-              className={s.btn}
-              type="button"
-              onClick={() => dispatch(deleteContact(id))}
-            >
-              <DeleteIcon width="26" height="26" />
-            </button>
-          </li>
-        </CSSTransition>
-      ))}
-    </TransitionGroup>
-  ) : (
-    <p>Your phonebook is empty. Please add contact.</p>
+  return (
+    <>
+      <CSSTransition
+        in={!contacts.length}
+        timeout={250}
+        classNames={popTransition}
+        mountOnEnter
+        unmountOnExit
+      >
+        <p>Your phonebook is empty. Please add contact.</p>
+      </CSSTransition>
+      <TransitionGroup component="ul" className={s.list}>
+        {contacts.map(({ id, name, number }) => (
+          <CSSTransition
+            key={id}
+            timeout={250}
+            mountOnEnter
+            unmountOnExit
+            classNames={popTransition}
+          >
+            <li className={s.item}>
+              <p className={s.info}>
+                <b>{name}</b>
+                <em>{number}</em>
+              </p>
+              <button
+                className={s.btn}
+                type="button"
+                onClick={() => dispatch(deleteContact(id))}
+              >
+                <DeleteIcon width="26" height="26" />
+              </button>
+            </li>
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
+    </>
   );
 }
 
