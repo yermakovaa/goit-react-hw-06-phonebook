@@ -15,7 +15,7 @@ function Filter() {
 
   return (
     <CSSTransition
-      in={contacts.length > 1}
+      in={contacts.length > 0}
       timeout={250}
       classNames={popTransition}
       mountOnEnter

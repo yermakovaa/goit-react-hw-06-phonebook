@@ -1,6 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteContact } from '../../redux/contacts/contacts-actions';
-import { getVisibleContacts } from '../../redux/contacts/contacts-selectors';
+import {
+  getVisibleContacts,
+  getContacts,
+} from '../../redux/contacts/contacts-selectors';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { ReactComponent as DeleteIcon } from '../../img/delete.svg';
 import s from './ContactList.module.css';
@@ -8,7 +11,8 @@ import popTransition from '../../utils/transitions/pop.module.css';
 
 function ContactList() {
   const dispatch = useDispatch();
-  const contacts = useSelector(getVisibleContacts);
+  const visibleContacts = useSelector(getVisibleContacts);
+  const contacts = useSelector(getContacts);
 
   return (
     <>
@@ -22,7 +26,7 @@ function ContactList() {
         <p>Your phonebook is empty. Please add contact.</p>
       </CSSTransition>
       <TransitionGroup component="ul" className={s.list}>
-        {contacts.map(({ id, name, number }) => (
+        {visibleContacts.map(({ id, name, number }) => (
           <CSSTransition
             key={id}
             timeout={250}
