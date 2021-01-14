@@ -4,7 +4,7 @@ import { getVisibleContacts } from '../../redux/contacts/contacts-selectors';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { ReactComponent as DeleteIcon } from '../../img/delete.svg';
 import s from './ContactList.module.css';
-import popTransition from './transitions/pop.module.css';
+import popTransition from '../../utils/transitions/pop.module.css';
 
 function ContactList() {
   const dispatch = useDispatch();
@@ -13,7 +13,13 @@ function ContactList() {
   return contacts.length > 0 ? (
     <TransitionGroup component="ul" className={s.list}>
       {contacts.map(({ id, name, number }) => (
-        <CSSTransition key={id} timeout={500} classNames={popTransition}>
+        <CSSTransition
+          key={id}
+          timeout={250}
+          mountOnEnter
+          unmountOnExit
+          classNames={popTransition}
+        >
           <li className={s.item}>
             <p className={s.info}>
               <b>{name}</b>

@@ -4,6 +4,8 @@ import {
   getFilter,
   getContacts,
 } from '../../redux/contacts/contacts-selectors';
+import { CSSTransition } from 'react-transition-group';
+import popTransition from '../../utils/transitions/pop.module.css';
 import s from './Filter.module.css';
 
 function Filter() {
@@ -12,7 +14,13 @@ function Filter() {
   const contacts = useSelector(getContacts);
 
   return (
-    contacts.length > 1 && (
+    <CSSTransition
+      in={contacts.length > 1}
+      timeout={250}
+      classNames={popTransition}
+      mountOnEnter
+      unmountOnExit
+    >
       <label className={s.label}>
         Find contacts by name
         <input
@@ -22,7 +30,7 @@ function Filter() {
           onChange={e => dispatch(filterContact(e.target.value))}
         />
       </label>
-    )
+    </CSSTransition>
   );
 }
 
